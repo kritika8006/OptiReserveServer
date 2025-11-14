@@ -19,7 +19,8 @@ app.use("/api/seats", seatRoutes);
 app.get("/", (req, res) => res.send("Server running"));
 
 // Connect MongoDB
-mongoose.connect("mongodb://localhost:27017/libbooking", {
+str = string(process.env.MONGO_URI) + "libbooking"
+mongoose.connect(str, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 })
