@@ -1,12 +1,16 @@
+import dotenv from "dotenv";
+dotenv.config()
+
 import express from "express";
-import cors from "cors";
 import mongoose from "mongoose";
+import cors from "cors";
+
 import userRoutes from "./routes/userRoutes.js";
 import seatRoutes from "./routes/seatRoutes.js";
 
 const app = express();
 const PORT = 5000;
-
+ 
 // Middleware
 app.use(cors());
 app.use(express.json());
@@ -15,16 +19,13 @@ app.use(express.json());
 app.use("/api/users", userRoutes);
 app.use("/api/seats", seatRoutes);
 
-// Test route
-app.get("/", (req, res) => res.send("Server running"));
+// MongoDB connection (local)
+const uri = `${process.env.MONGO_URI}libbooking`; // local DB
+mongoose.connect(uri)
+    .then(() => console.log("MongoDB connected"))
+    .catch(err => console.error("MongoDB connection error:", err));
 
-// Connect MongoDB
-str = string(process.env.MONGO_URI) + "libbooking"
-mongoose.connect(str, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-})
-.then(() => console.log("MongoDB connected"))
-.catch((err) => console.log(err));
-
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+// Start server
+app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
+});
